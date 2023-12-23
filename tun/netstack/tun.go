@@ -51,7 +51,7 @@ type netTun struct {
 
 type Net netTun
 
-func CreateNetTUN(localAddresses, dnsServers []netip.Addr, mtu int) (tun.Device, *Net, error) {
+func CreateNetTUN(localAddresses, dnsServers []netip.Addr, mtu int) (tun.Device, *Net, *stack.Stack, error) {
 	opts := stack.Options{
 		NetworkProtocols:   []stack.NetworkProtocolFactory{ipv4.NewProtocol, ipv6.NewProtocol},
 		TransportProtocols: []stack.TransportProtocolFactory{tcp.NewProtocol, udp.NewProtocol, icmp.NewProtocol6, icmp.NewProtocol4},
@@ -68,12 +68,12 @@ func CreateNetTUN(localAddresses, dnsServers []netip.Addr, mtu int) (tun.Device,
 	sackEnabledOpt := tcpip.TCPSACKEnabled(true) // TCP SACK is disabled by default
 	tcpipErr := dev.stack.SetTransportProtocolOption(tcp.ProtocolNumber, &sackEnabledOpt)
 	if tcpipErr != nil {
-		return nil, nil, fmt.Errorf("could not enable TCP SACK: %v", tcpipErr)
+		return nil, nil, nil, fmt.Errorf("could not enable TCP SACK: %v", tcpipErr)
 	}
 	dev.ep.AddNotify(dev)
 	tcpipErr = dev.stack.CreateNIC(1, dev.ep)
 	if tcpipErr != nil {
-		return nil, nil, fmt.Errorf("CreateNIC: %v", tcpipErr)
+		return nil, nil, nil, fmt.Errorf("CreateNIC: %v", tcpipErr)
 	}
 	for _, ip := range localAddresses {
 		var protoNumber tcpip.NetworkProtocolNumber
@@ -88,7 +88,7 @@ func CreateNetTUN(localAddresses, dnsServers []netip.Addr, mtu int) (tun.Device,
 		}
 		tcpipErr := dev.stack.AddProtocolAddress(1, protoAddr, stack.AddressProperties{})
 		if tcpipErr != nil {
-			return nil, nil, fmt.Errorf("AddProtocolAddress(%v): %v", ip, tcpipErr)
+			return nil, nil, nil, fmt.Errorf("AddProtocolAddress(%v): %v", ip, tcpipErr)
 		}
 		if ip.Is4() {
 			dev.hasV4 = true
@@ -104,7 +104,7 @@ func CreateNetTUN(localAddresses, dnsServers []netip.Addr, mtu int) (tun.Device,
 	}
 
 	dev.events <- tun.EventUp
-	return dev, (*Net)(dev), nil
+	return dev, (*Net)(dev), dev.stack, nil
 }
 
 func (tun *netTun) Name() (string, error) {
