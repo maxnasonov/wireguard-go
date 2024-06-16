@@ -17,9 +17,9 @@ import (
 	"time"
 	"unsafe"
 
-	"golang.org/x/sys/unix"
 	"github.com/maxnasonov/wireguard-go/conn"
 	"github.com/maxnasonov/wireguard-go/rwcancel"
+	"golang.org/x/sys/unix"
 )
 
 const (
@@ -470,6 +470,7 @@ func (tun *NativeTun) Read(bufs [][]byte, sizes []int, offset int) (int, error) 
 			return handleVirtioRead(readInto[:n], bufs, sizes, offset)
 		} else {
 			sizes[0] = n
+			fmt.Printf("read %d bytes", n)
 			return 1, nil
 		}
 	}
