@@ -467,10 +467,11 @@ func (tun *NativeTun) Read(bufs [][]byte, sizes []int, offset int) (int, error) 
 			return 0, err
 		}
 		if tun.vnetHdr {
+			fmt.Println("vnetHdr execution branch")
 			return handleVirtioRead(readInto[:n], bufs, sizes, offset)
 		} else {
 			sizes[0] = n
-			fmt.Printf("read %d bytes", n)
+			fmt.Printf("read %d bytes\n", n)
 			return 1, nil
 		}
 	}
