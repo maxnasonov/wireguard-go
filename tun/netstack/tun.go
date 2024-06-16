@@ -129,7 +129,7 @@ func (tun *netTun) Read(buf [][]byte, sizes []int, offset int) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	fmt.Printf("read %d bytes", n)
+	fmt.Printf("===== tun read %d bytes\n", n)
 	sizes[0] = n
 	return 1, nil
 }
