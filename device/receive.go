@@ -162,12 +162,14 @@ func (device *Device) RoutineReceiveIncoming(maxBatchSize int, recv conn.Receive
 				value := device.indexTable.Lookup(receiver)
 				keypair := value.keypair
 				if keypair == nil {
+					device.log.Verbosef("keypair is nil")
 					continue
 				}
 
 				// check keypair expiry
 
 				if keypair.created.Add(RejectAfterTime).Before(time.Now()) {
+					device.log.Verbosef("keypair expired")
 					continue
 				}
 
