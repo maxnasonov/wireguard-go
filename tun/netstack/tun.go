@@ -139,9 +139,10 @@ func (tun *netTun) Read(buf [][]byte, sizes []int, offset int) (int, error) {
 
 func (tun *netTun) Write(buf [][]byte, offset int) (int, error) {
 	for _, buf := range buf {
-		fmt.Printf("writing buf %s to TUN", string(buf))
+		fmt.Printf("writing buf %s to TUN\n", string(buf))
 		packet := buf[offset:]
 		if len(packet) == 0 {
+			fmt.Println("packet is empty")
 			continue
 		}
 
@@ -154,6 +155,7 @@ func (tun *netTun) Write(buf [][]byte, offset int) (int, error) {
 		default:
 			return 0, syscall.EAFNOSUPPORT
 		}
+		fmt.Println("buf has been written")
 	}
 	return len(buf), nil
 }

@@ -544,6 +544,7 @@ func (peer *Peer) RoutineSequentialReceiver(maxBatchSize int) {
 		device.log.Verbosef("buffer size %d", len(bufs))
 		if len(bufs) > 0 {
 			_, err := device.tun.device.Write(bufs, MessageTransportOffsetContent)
+			device.log.Verbosef("write to TUN result is %v", err)
 			if err != nil && !device.isClosed() {
 				device.log.Errorf("Failed to write packets to TUN device: %v", err)
 			}
