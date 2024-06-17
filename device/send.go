@@ -11,14 +11,15 @@ import (
 	"errors"
 	"net"
 	"os"
+	"runtime/debug"
 	"sync"
 	"time"
 
+	"github.com/maxnasonov/wireguard-go/conn"
+	"github.com/maxnasonov/wireguard-go/tun"
 	"golang.org/x/crypto/chacha20poly1305"
 	"golang.org/x/net/ipv4"
 	"golang.org/x/net/ipv6"
-	"github.com/maxnasonov/wireguard-go/conn"
-	"github.com/maxnasonov/wireguard-go/tun"
 )
 
 /* Outbound flow
@@ -244,6 +245,7 @@ func (device *Device) RoutineReadFromTUN() {
 
 	for {
 		// read packets
+		debug.PrintStack()
 		count, readErr = device.tun.device.Read(bufs, sizes, offset)
 		for i := 0; i < count; i++ {
 			if sizes[i] < 1 {
