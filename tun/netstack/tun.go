@@ -17,7 +17,6 @@ import (
 	"net/netip"
 	"os"
 	"regexp"
-	"runtime/debug"
 	"strconv"
 	"strings"
 	"syscall"
@@ -126,7 +125,6 @@ func (tun *netTun) Read(buf [][]byte, sizes []int, offset int) (int, error) {
 		return 0, os.ErrClosed
 	}
 
-	debug.PrintStack()
 	n, err := view.Read(buf[0][offset:])
 	if err != nil {
 		return 0, err
