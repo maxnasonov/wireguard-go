@@ -131,6 +131,7 @@ func (device *Device) RoutineReceiveIncoming(maxBatchSize int, recv conn.Receive
 		// handle each packet in the batch
 		for i, size := range sizes[:count] {
 			if size < MinMessageSize {
+				device.log.Verbosef("size too small")
 				continue
 			}
 
@@ -147,7 +148,9 @@ func (device *Device) RoutineReceiveIncoming(maxBatchSize int, recv conn.Receive
 
 				// check size
 
+				device.log.Verbosef("transport type")
 				if len(packet) < MessageTransportSize {
+					device.log.Verbosef("transport size too small")
 					continue
 				}
 
@@ -191,16 +194,19 @@ func (device *Device) RoutineReceiveIncoming(maxBatchSize int, recv conn.Receive
 			// otherwise it is a fixed size & handshake related packet
 
 			case MessageInitiationType:
+				device.log.Verbosef("initiation type")
 				if len(packet) != MessageInitiationSize {
 					continue
 				}
 
 			case MessageResponseType:
+				device.log.Verbosef("response type")
 				if len(packet) != MessageResponseSize {
 					continue
 				}
 
 			case MessageCookieReplyType:
+				device.log.Verbosef("cookie reply type")
 				if len(packet) != MessageCookieReplySize {
 					continue
 				}
