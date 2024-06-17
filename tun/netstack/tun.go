@@ -17,7 +17,6 @@ import (
 	"net/netip"
 	"os"
 	"regexp"
-	"runtime/debug"
 	"strconv"
 	"strings"
 	"syscall"
@@ -121,12 +120,14 @@ func (tun *netTun) Events() <-chan tun.Event {
 }
 
 func (tun *netTun) Read(buf [][]byte, sizes []int, offset int) (int, error) {
-	debug.PrintStack()
+	fmt.Println("reading TUN")
 	view, ok := <-tun.incomingPacket
+	fmt.Println("received packet in TUN")
 	if !ok {
 		return 0, os.ErrClosed
 	}
 
+	fmt.Println("reading packet from TUN")
 	n, err := view.Read(buf[0][offset:])
 	if err != nil {
 		return 0, err
