@@ -541,6 +541,7 @@ func (peer *Peer) RoutineSequentialReceiver(maxBatchSize int) {
 		if dataPacketReceived {
 			peer.timersDataReceived()
 		}
+		device.log.Verbosef("buffer size %d", len(bufs))
 		if len(bufs) > 0 {
 			_, err := device.tun.device.Write(bufs, MessageTransportOffsetContent)
 			if err != nil && !device.isClosed() {
