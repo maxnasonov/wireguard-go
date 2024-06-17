@@ -452,6 +452,7 @@ func (peer *Peer) RoutineSequentialReceiver(maxBatchSize int) {
 	bufs := make([][]byte, 0, maxBatchSize)
 
 	for elemsContainer := range peer.queue.inbound.c {
+		device.log.Verbosef("processing queue")
 		if elemsContainer == nil {
 			return
 		}
@@ -462,10 +463,12 @@ func (peer *Peer) RoutineSequentialReceiver(maxBatchSize int) {
 		for i, elem := range elemsContainer.elems {
 			if elem.packet == nil {
 				// decryption failed
+				device.log.Verbosef("decryption failed")
 				continue
 			}
 
 			if !elem.keypair.replayFilter.ValidateCounter(elem.counter, RejectAfterMessages) {
+				device.log.Verbosef("validation failed")
 				continue
 			}
 
@@ -485,12 +488,15 @@ func (peer *Peer) RoutineSequentialReceiver(maxBatchSize int) {
 
 			switch elem.packet[0] >> 4 {
 			case 4:
+				device.log.Verbosef("IPv4")
 				if len(elem.packet) < ipv4.HeaderLen {
+					device.log.Verbosef("header too short")
 					continue
 				}
 				field := elem.packet[IPv4offsetTotalLength : IPv4offsetTotalLength+2]
 				length := binary.BigEndian.Uint16(field)
 				if int(length) > len(elem.packet) || int(length) < ipv4.HeaderLen {
+					device.log.Verbosef("YYYYYYYYYYYY")
 					continue
 				}
 				elem.packet = elem.packet[:length]
