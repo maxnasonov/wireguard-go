@@ -231,6 +231,7 @@ func (device *Device) RoutineReceiveIncoming(maxBatchSize int, recv conn.Receive
 			}
 		}
 		for peer, elemsContainer := range elemsByPeer {
+			device.log.Verbosef("XXXXXXXXXX %s", peer.String())
 			if peer.isRunning.Load() {
 				peer.queue.inbound.c <- elemsContainer
 				device.queue.decryption.c <- elemsContainer
