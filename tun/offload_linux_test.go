@@ -11,8 +11,8 @@ import (
 
 	"golang.org/x/sys/unix"
 	"github.com/maxnasonov/wireguard-go/conn"
-	"gvisor.dev/gvisor/pkg/tcpip"
-	"gvisor.dev/gvisor/pkg/tcpip/header"
+	"github.com/maxnasonov/gvisor/pkg/tcpip"
+	"github.com/maxnasonov/gvisor/pkg/tcpip/header"
 )
 
 const (
