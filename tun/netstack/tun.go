@@ -384,6 +384,10 @@ func (net *Net) ListenPing(laddr *PingAddr) (*PingConn, error) {
 	return net.ListenPingAddr(la)
 }
 
+func (net *Net) Stack() *stack.Stack {
+	return net.stack
+}
+
 func (pc *PingConn) LocalAddr() net.Addr {
 	return pc.laddr
 }
