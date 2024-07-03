@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"golang.org/x/sys/unix"
-	"github.com/maxnasonov/wireguard-go/conn"
+	"golang.zx2c4.com/wireguard/conn"
 	"gvisor.dev/gvisor/pkg/tcpip"
 	"gvisor.dev/gvisor/pkg/tcpip/header"
 )

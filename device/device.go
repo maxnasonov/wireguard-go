@@ -11,10 +11,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/maxnasonov/wireguard-go/conn"
-	"github.com/maxnasonov/wireguard-go/ratelimiter"
-	"github.com/maxnasonov/wireguard-go/rwcancel"
-	"github.com/maxnasonov/wireguard-go/tun"
+	"golang.zx2c4.com/wireguard/conn"
+	"golang.zx2c4.com/wireguard/ratelimiter"
+	"golang.zx2c4.com/wireguard/rwcancel"
+	"golang.zx2c4.com/wireguard/tun"
 )
 
 type Device struct {

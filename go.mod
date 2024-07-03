@@ -1,4 +1,4 @@
-module github.com/maxnasonov/wireguard-go
+module golang.zx2c4.com/wireguard
 
 go 1.20
 
